@@ -56,6 +56,8 @@
         </div>
 
         <script>
+
+            //initial setup for the project
             let tryCount = 3;
             let generatedPin = null;
             const displayPin = document.querySelector('.pin-display');
@@ -64,8 +66,10 @@
             const notifyMessage = document.querySelectorAll('.notify');
             const notifySection = document.querySelector('.notify-section');
 
+            //adding event listener for generating pin
             genBtn.addEventListener('click', pinGenerator);
 
+            //adding event listener for all buttons
             const pinKeys = document.querySelector('.calc-body');
             pinKeys.addEventListener('click', (event) => {
                 const target = event.target;
@@ -85,13 +89,14 @@
                             genBtn.disabled = false;
                             genBtn.style.backgroundColor = "blue";
                         } else {
+                            //Logic if no tries left
                             if (tryCount < 1) {
                                 target.disabled = true;
                                 target.style.backgroundColor = "red";
                                 generateMessage("❌ You are out of tries");
                             } else {
                                 tryCount--;
-                                document.getElementById("try-count").innerHTML = tryCount;
+                                document.getElementById("try-count").innerHTML = tryCount; //keeping track for try numbers.
                                 generateMessage("❌ Pin Didn't Match, Please try again");
                             }
                         }
@@ -102,19 +107,23 @@
                     }
 
                 } else if (target.className == 'clear-btn') {
-                    pinInput.value = '';
+                    pinInput.value = ''; //clearing everything in the input field
                 } else if (target.className == 'back-btn') {
                     let pin = pinInput.value;
                     if (pin !== '') {
-                        pinInput.value = pin.slice(0, pin.length - 1);
+                        pinInput.value = pin.slice(0, pin.length - 1); //removing only the last pin element
                     }
                 } else {
                     console.log("Invalid button press");
                 }
             });
 
+            //function for resetting everything and generating pin
             function pinGenerator() {
                 pinInput.value = '';
+                tryCount = 3;
+                document.getElementById("try-count").innerHTML = tryCount;
+                clearMessages();
                 let randomNum = Math.random() * (9000) + 1000;
                 generatedPin = String(Math.floor(randomNum));
                 displayPin.value = generatedPin;
@@ -122,14 +131,20 @@
                 genBtn.style.backgroundColor = "red";
             }
 
+            //function for generating error and success messages
             function generateMessage(str) {
-                while (notifySection.firstChild) {
-                    notifySection.removeChild(notifySection.firstChild);
-                }
+                clearMessages();
                 let message = document.createElement("P");
                 message.className = "notify";
                 message.appendChild(document.createTextNode(str));
                 notifySection.appendChild(message);
+            }
+
+            //function for clearing previous messages
+            function clearMessages() {
+                while (notifySection.firstChild) {
+                    notifySection.removeChild(notifySection.firstChild);
+                }
             }
 
         </script>
